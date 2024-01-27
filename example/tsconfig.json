@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native-sf-symbols": ["../src/index"],
+      "react-native-sf-symbols/*": ["../src/*"]
+    }
+  }
+}
