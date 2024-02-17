@@ -1,11 +1,27 @@
-import { requireNativeViewManager } from 'expo-modules-core';
-import * as React from 'react';
+import { requireNativeViewManager } from "expo-modules-core";
 
-import { SymbolModuleViewProps } from './SymbolModule.types';
+import {
+  NativeSymbolViewProps,
+  SymbolModuleViewProps,
+} from "./SymbolModule.types";
 
-const NativeView: React.ComponentType<SymbolModuleViewProps> =
-  requireNativeViewManager('SymbolModule');
+const NativeView: React.ComponentType<NativeSymbolViewProps> =
+  requireNativeViewManager("SymbolModule");
 
 export default function SymbolModuleView(props: SymbolModuleViewProps) {
-  return <NativeView {...props} />;
+  const nativeProps = getNativeProps(props);
+  return <NativeView {...nativeProps} />;
+}
+
+function getNativeProps(props: SymbolModuleViewProps): NativeSymbolViewProps {
+  const colors = Array.isArray(props.colors) ? props.colors : [props.colors];
+  const animated = !!props.animationSpec ?? false;
+  const type = props.type ?? "monochrome";
+
+  return {
+    ...props,
+    colors,
+    animated,
+    type,
+  };
 }
