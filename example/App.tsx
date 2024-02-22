@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View, Text, PlatformColor } from "react-native";
 import {
-  SymbolModuleView,
+  Symbol,
   SymbolModuleViewProps,
-  getSymbolNamesAsync,
+  AnimationEffect,
 } from "react-native-sf-symbols";
 
-const symbolNames = [
+const names = [
   "keyboard.badge.ellipsis",
   "bandage",
   "minus",
@@ -82,53 +82,52 @@ const symbolNames = [
   "speaker.slash.circle",
 ];
 
-const type = ["monochrome", "hierarchical", "multicolor", "palette"];
-
-const animation = ["bounce", "scale", "pulse", "variableColor"];
-
-// convert to objects of {name: , tpye:}
-
 export default function App() {
-  const [symbolNames, setSymbolNames] = useState<string[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const names = await getSymbolNamesAsync();
-      setSymbolNames(names);
-    })();
-  }, []);
-
+  const [symbolNames, setSymbolNames] = useState<string[]>(names);
   return (
     <View style={styles.container}>
-      <FlatList
-        data={symbolNames.slice(0, 100)}
-        ListHeaderComponent={
-          <Text
-            style={{ textAlign: "center", fontSize: 18, marginVertical: 5 }}
-          >
-            Total Symbols: {symbolNames.length}
-          </Text>
-        }
-        contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item}
-        numColumns={4}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <SymbolModuleView
-            name={item}
-            style={{ width: 80, height: 80, margin: 5 }}
-            type={
-              type[
-                Math.floor(Math.random() * type.length)
-              ] as SymbolModuleViewProps["type"]
-            }
-            animationSpec={{
-              type: animation[Math.floor(Math.random() * type.length)] as any,
-              repeating: true,
-              speed: 0.5,
-            }}
-          />
-        )}
+      <Symbol
+        name="externaldrive.fill.badge.wifi"
+        style={{ width: 80, height: 80, margin: 5 }}
+        resizeMode="scaleAspectFit"
+        type="hierarchical"
+        animationSpec={{
+          effect: {
+            type: "bounce",
+            direction: "down",
+          },
+          repeating: true,
+          speed: 0.2,
+        }}
+      />
+
+      <Symbol
+        name="externaldrive.badge.wifi"
+        style={{ width: 80, height: 80, margin: 5 }}
+        resizeMode="scaleAspectFit"
+        animationSpec={{
+          variableAnimationSpec: {
+            cumulative: true,
+            dimInactiveLayers: false,
+          },
+        }}
+      />
+
+      <Symbol
+        name="pencil.tip.crop.circle.badge.plus"
+        style={{ width: 80, height: 80, margin: 5 }}
+        resizeMode="scaleAspectFit"
+        tint="red"
+        type="palette"
+        animationSpec={{
+          effect: {
+            type: "scale",
+            direction: "up",
+            wholeSymbol: false,
+          },
+          repeating: true,
+          speed: 0.8,
+        }}
       />
     </View>
   );
@@ -137,7 +136,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     paddingTop: 44,
     alignItems: "center",
   },

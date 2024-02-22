@@ -8,15 +8,19 @@ import {
 const NativeView: React.ComponentType<NativeSymbolViewProps> =
   requireNativeViewManager("SymbolModule");
 
-export default function SymbolModuleView(props: SymbolModuleViewProps) {
+export default function SymbolView(props: SymbolModuleViewProps) {
   const nativeProps = getNativeProps(props);
   return <NativeView {...nativeProps} />;
 }
 
 function getNativeProps(props: SymbolModuleViewProps): NativeSymbolViewProps {
-  const colors = Array.isArray(props.colors) ? props.colors : [props.colors];
-  const animated = !!props.animationSpec ?? false;
-  const type = props.type ?? "monochrome";
+  const colors = Array.isArray(props.colors)
+    ? props.colors
+    : props.colors
+    ? [props.colors]
+    : [];
+  const animated = !!props.animationSpec || false;
+  const type = props.type || "monochrome";
 
   return {
     ...props,

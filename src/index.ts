@@ -1,9 +1,9 @@
 import SymbolModule from "./SymbolModule";
-import { SymbolModuleViewProps } from "./SymbolModule.types";
-import SymbolModuleView from "./SymbolModuleView";
+import { SymbolModuleViewProps, AnimationEffect } from "./SymbolModule.types";
+import SymbolView from "./SymbolModuleView";
 
 export function getSymbolNamesAsync(): Promise<string[]> {
   return SymbolModule.getSymbolNamesAsync();
 }
 
-export { SymbolModuleView, SymbolModuleViewProps };
+export { SymbolView as Symbol, SymbolModuleViewProps, AnimationEffect };

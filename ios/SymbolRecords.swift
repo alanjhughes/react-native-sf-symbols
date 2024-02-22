@@ -109,41 +109,87 @@ enum SymbolContentMode: String, Enumerable {
   }
 }
 
-internal struct AnimationSpec: Record {
-  @Field
-  var type: AnimationType = .bounce
-  @Field
-  var repeating: Bool?
-  @Field 
-  var repeatCount: Int?
-  @Field
-  var speed: Double?
-}
-
 enum SymbolType: String, Enumerable {
-  case monochrome 
+  case monochrome
   case hierarchical
   case palette
   case multicolor
 }
 
+enum AnimationDirection: String, Enumerable {
+  case up
+  case down
+}
+
 enum AnimationType: String, Enumerable {
-  case variableColor
   case bounce
   case pulse
   case scale
+}
+
+internal struct AnimationSpec: Record {
+  @Field var effect: AnimationEffect?
+  @Field var repeating: Bool?
+  @Field var repeatCount: Int?
+  @Field var speed: Double?
+  @Field var variableAnimationSpec: VariableColorSpec?
+}
+
+internal struct AnimationEffect: Record {
+  @Field var type: AnimationType = .bounce
+  @Field var wholeSymbol: Bool?
+  @Field var direction: AnimationDirection?
   
   @available(iOS 17.0, *)
-  func toSymbolEffect() -> any SymbolEffect {
-    switch self {
+  func toEffect() -> EffectAdding {
+    switch type {
     case .bounce:
-      return .bounce
+      return BounceEffect(wholeSymbol: wholeSymbol, direction: direction)
     case .pulse:
-      return .pulse
+      return PulseEffect(wholeSymbol: wholeSymbol)
     case .scale:
-      return .scale
-    case .variableColor:
-      return .variableColor
+      return ScaleEffect(wholeSymbol: wholeSymbol, direction: direction)
     }
   }
 }
+
+internal struct VariableColorSpec: Record {
+  @Field var reversing: Bool?
+  @Field var nonReversing: Bool?
+  @Field var cumulative: Bool?
+  @Field var iterative: Bool?
+  @Field var hideInactiveLayers: Bool?
+  @Field var dimInactiveLayers: Bool?
+  
+  @available(iOS 17.0, *)
+  func toVariableEffect() -> VariableColorSymbolEffect {
+    var effect: VariableColorSymbolEffect = .variableColor
+    
+    if cumulative != nil {
+      effect = effect.cumulative
+    }
+    
+    if iterative != nil {
+      effect = effect.iterative
+    }
+    
+    if hideInactiveLayers != nil {
+      effect = effect.hideInactiveLayers
+    }
+    
+    if dimInactiveLayers != nil {
+      effect = effect.dimInactiveLayers
+    }
+    
+    if reversing != nil {
+      effect = effect.reversing
+    }
+    
+    if nonReversing != nil {
+      effect = effect.nonReversing
+    }
+    
+    return effect
+  }
+}
+

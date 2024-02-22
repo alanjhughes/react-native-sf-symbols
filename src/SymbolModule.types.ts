@@ -6,6 +6,7 @@ export interface SymbolModuleViewProps extends ViewProps {
   scale?: SymbolScale;
   weight?: SymbolWeight;
   colors?: string | string[];
+  tint?: string;
   resizeMode?: SymbolContentMode;
   animationSpec?: AnimationSpec;
 }
@@ -16,8 +17,10 @@ export interface NativeSymbolViewProps extends ViewProps {
   scale?: SymbolScale;
   weight?: SymbolWeight;
   animated: boolean;
-  colors?: string[];
+  colors?: string | string[];
+  tint?: string;
   resizeMode?: SymbolContentMode;
+  animationSpec?: AnimationSpec;
 }
 
 type SymbolWeight =
@@ -50,12 +53,27 @@ type SymbolContentMode =
   | "bottomRight";
 
 export type AnimationSpec = {
-  type: AnimationType;
+  effect?: AnimationEffect;
   repeating?: boolean;
   repeatCount?: number;
   speed?: number;
+  variableAnimationSpec?: VariableAnimationSpec;
 };
 
-type AnimationType = "variableColor" | "bounce" | "pulse" | "scale";
+export type AnimationEffect = {
+  type: AnimationType;
+  wholeSymbol?: boolean;
+  direction?: "up" | "down";
+};
+
+type AnimationType = "bounce" | "pulse" | "scale";
+
+type VariableAnimationSpec = {
+  reversing?: boolean;
+  cumulative?: boolean;
+  iterative?: boolean;
+  hideInactiveLayers?: boolean;
+  dimInactiveLayers?: boolean;
+};
 
 type SymbolType = "monochrome" | "hierarchical" | "palette" | "multicolor";

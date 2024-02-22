@@ -16,7 +16,7 @@ public class SymbolModule: Module {
       return []
     }
     
-    View(SymbolModuleView.self) {
+    View(SymbolView.self) {
       Prop("name") { (view, name: String) in
         view.name = name
       }
@@ -29,6 +29,10 @@ public class SymbolModule: Module {
         view.scale = scale?.imageSymbolScale() ?? .unspecified
       }
       
+      Prop("tint") { (view, color: UIColor?) in
+        view.tint = color
+      }
+      
       Prop("animated") { (view, animated: Bool?) in
         view.animated = animated ?? false
       }
@@ -37,7 +41,7 @@ public class SymbolModule: Module {
         view.weight = weight?.imageSymbolWeight() ?? .regular
       }
       
-      Prop("colors") { (view, color: [UIColor?]?) in
+      Prop("colors") { (view, color: [UIColor]?) in
         view.colors = color
       }
       
